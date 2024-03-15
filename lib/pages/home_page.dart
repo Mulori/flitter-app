@@ -1,5 +1,8 @@
+import 'package:flitter/pages/brand_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:flitter/pages/product_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +20,10 @@ class HomePage extends StatelessWidget {
                   Expanded(
                       flex: 1,
                       child: InkWell(
-                          onTap: () => {print("meus produtos")},
+                          onTap: () => {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const ProductPage()))
+                              },
                           splashColor: Colors.amber.withOpacity(
                               0.5), // Cor da animação de pressionar
                           highlightColor: Colors.amber.withOpacity(
@@ -41,7 +47,10 @@ class HomePage extends StatelessWidget {
                   Expanded(
                       flex: 1,
                       child: InkWell(
-                          onTap: () => {print("meus produtos")},
+                          onTap: () => {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const BrandPage()))
+                              },
                           splashColor: Colors.amber.withOpacity(
                               0.5), // Cor da animação de pressionar
                           highlightColor: Colors.amber.withOpacity(
@@ -53,8 +62,8 @@ class HomePage extends StatelessWidget {
                               padding: EdgeInsets.all(10.0),
                               child: Column(
                                 children: [
-                                  Icon(Icons.shopping_cart),
-                                  Text("Meus Pedidos"),
+                                  Icon(Icons.bookmark),
+                                  Text("Marcas"),
                                 ],
                               ),
                             ),

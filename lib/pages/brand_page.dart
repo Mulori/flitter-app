@@ -1,17 +1,17 @@
-import 'package:flitter/models/product_model.dart';
-import 'package:flitter/pages/new_product_page.dart';
-import 'package:flitter/repositories/Entity/product.dart';
+import 'package:flitter/models/brand_model.dart';
+import 'package:flitter/pages/new_brand_page.dart';
+import 'package:flitter/repositories/Entity/brand.dart';
 import 'package:flutter/material.dart';
 
-class ProductPage extends StatefulWidget {
-  const ProductPage({super.key});
+class BrandPage extends StatefulWidget {
+  const BrandPage({super.key});
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  State<BrandPage> createState() => _BrandPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
-  List<ProductModel> lista = [];
+class _BrandPageState extends State<BrandPage> {
+  List<BrandModel> lista = [];
 
   @override
   void initState() {
@@ -20,15 +20,11 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future<void> _refreshList() async {
-    await getProdutos().then((value) => {
+    await getBrand().then((value) => {
           setState(() {
             lista = value;
           })
         });
-  }
-
-  String formatarMoeda(double valor) {
-    return 'R\$ ${valor.toStringAsFixed(2)}';
   }
 
   @override
@@ -36,13 +32,13 @@ class _ProductPageState extends State<ProductPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[400],
-        title: const Text("Produtos"),
+        title: const Text("Marcas"),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.amber[400],
         onPressed: () => {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const NewProductPage()))
+              MaterialPageRoute(builder: (context) => const NewBrandPage()))
         },
         child: const Icon(Icons.add_box),
       ),
@@ -52,14 +48,11 @@ class _ProductPageState extends State<ProductPage> {
         child: ListView.builder(
             itemCount: lista.length,
             itemBuilder: (BuildContext context, int index) {
-              var subtitle =
-                  'Estoque: ${lista[index].estoqueProduto}    ${formatarMoeda(lista[index].valorDeVenda)}    Cód: ${lista[index].codigoDeBarras}';
               return ListTile(
                   title: Text('#' +
                       lista[index].id.toString() +
                       ' ' +
-                      lista[index].tituloDoProduto),
-                  subtitle: Text(subtitle.toString()));
+                      lista[index].nomeMarca));
             }),
       ),
     );
