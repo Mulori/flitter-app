@@ -1,41 +1,41 @@
 import 'package:flitter/components/toast.dart';
-import 'package:flitter/models/brand_model.dart';
+import 'package:flitter/models/group_model.dart';
+import 'package:flitter/repositories/Entity/group.dart';
 import 'package:flutter/material.dart';
-import 'package:flitter/repositories/Entity/brand.dart';
 import 'package:toastification/toastification.dart';
 
-class NewBrandPage extends StatefulWidget {
-  const NewBrandPage({super.key});
+class NewGroupPage extends StatefulWidget {
+  const NewGroupPage({super.key});
 
   @override
-  State<NewBrandPage> createState() => _NewBrandPageState();
+  State<NewGroupPage> createState() => _NewGroupPageState();
 }
 
-class _NewBrandPageState extends State<NewBrandPage> {
-  final TextEditingController nomeMarcaController = TextEditingController();
+class _NewGroupPageState extends State<NewGroupPage> {
+  final TextEditingController nomeGrupoController = TextEditingController();
 
   void limparCampos() {
-    nomeMarcaController.text = "";
+    nomeGrupoController.text = "";
   }
 
   void salvar() {
-    if (nomeMarcaController.text.isEmpty) {
-      showToast(context, "Ops... Algo deu errado!", "Preencha o campo marca.",
-          ToastificationType.warning);
+    if (nomeGrupoController.text.isEmpty) {
+      showToast(context, "Ops... Algo deu errado!",
+          "Preencha o campo nome do grupo.", ToastificationType.warning);
       return;
     }
 
-    BrandModel marca = BrandModel(
+    GroupModel marca = GroupModel(
         id: 0,
-        nomeMarca: nomeMarcaController.text.trim(),
+        nomeGrupo: nomeGrupoController.text.trim(),
         dataHoraCriacao: DateTime.now(),
         dataHoraModificacao: DateTime.now(),
         dataHoraSincronizacao: DateTime(2000, 1, 1));
 
-    create(marca);
+    createGroup(marca);
     limparCampos();
 
-    showToast(context, "Sucesso", "A marca foi inserida com sucesso!",
+    showToast(context, "Sucesso", "O grupo foi inserido com sucesso!",
         ToastificationType.success);
   }
 
@@ -44,7 +44,7 @@ class _NewBrandPageState extends State<NewBrandPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[400],
-        title: const Text("Nova Marca"),
+        title: const Text("Novo Grupo"),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.amber[400],
@@ -57,18 +57,19 @@ class _NewBrandPageState extends State<NewBrandPage> {
           children: [
             const Align(
               alignment: FractionalOffset.centerLeft,
-              child: Text("Nome da Marca:"),
+              child: Text("Nome do Grupo:"),
             ),
             TextField(
-              controller: nomeMarcaController,
+              controller: nomeGrupoController,
               maxLength: 50,
               decoration: const InputDecoration(
-                hintText: 'Ex: Coca Cola',
+                hintText: 'Ex: Bebidas',
               ),
             )
           ],
         ),
       ),
     );
+    ;
   }
 }

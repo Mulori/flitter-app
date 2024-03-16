@@ -35,6 +35,15 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {},
+              child: const Icon(Icons.search),
+            ),
+          )
+        ],
         backgroundColor: Colors.amber[400],
         title: const Text("Produtos"),
       ),
@@ -55,10 +64,8 @@ class _ProductPageState extends State<ProductPage> {
               var subtitle =
                   'Estoque: ${lista[index].estoqueProduto}    ${formatarMoeda(lista[index].valorDeVenda)}    Cód: ${lista[index].codigoDeBarras}';
               return ListTile(
-                  title: Text('#' +
-                      lista[index].id.toString() +
-                      ' ' +
-                      lista[index].tituloDoProduto),
+                  title: Text(
+                      '#${lista[index].id} ${lista[index].tituloDoProduto}'),
                   subtitle: Text(subtitle.toString()));
             }),
       ),
