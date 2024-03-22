@@ -11,14 +11,18 @@ import 'package:flitter/repositories/Entity/product.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toastification/toastification.dart';
 
-class NewProductPage extends StatefulWidget {
-  const NewProductPage({super.key});
+class EditProductPage extends StatefulWidget {
+  final ProductModel produtoSelecionado;
+
+  const EditProductPage({super.key, required this.produtoSelecionado});
 
   @override
-  State<NewProductPage> createState() => _NewProductPageState();
+  State<EditProductPage> createState() => _EditProductPageState();
 }
 
-class _NewProductPageState extends State<NewProductPage> {
+class _EditProductPageState extends State<EditProductPage> {
+  late ProductModel _ProdutoSelecionado;
+
   final TextEditingController tituloController = TextEditingController();
   final TextEditingController barrasController = TextEditingController();
   final TextEditingController valorCompraController = TextEditingController();
@@ -94,6 +98,37 @@ class _NewProductPageState extends State<NewProductPage> {
     super.initState();
     carregaListaMarca();
     carregaListaGrupo();
+
+    setState(() {
+      _ProdutoSelecionado = widget.produtoSelecionado;
+      carregaCampos();
+    });
+  }
+
+  void carregaCampos() {
+    tituloController.text = _ProdutoSelecionado.tituloDoProduto;
+    barrasController.text = _ProdutoSelecionado.codigoDeBarras;
+    valorCompraController.text = _ProdutoSelecionado.valorDeCusto.toString();
+    valorVendaController.text = _ProdutoSelecionado.valorDeVenda.toString();
+    estoqueController.text = _ProdutoSelecionado.estoqueProduto.toString();
+    caminhoImagem = _ProdutoSelecionado.caminhoImagem;
+  }
+
+  void definirDropDownSelecionadoPeloId(int id, int tipo) {
+    switch (tipo) {
+      case 1:
+        BrandModel? marca = listaMarca.firstWhere((marca) => marca.id == id);
+        setState(() {
+          marcaSelecionada = marca;
+        });
+        break;
+      case 2:
+        GroupModel? grupo = listaGrupo.firstWhere((marca) => marca.id == id);
+        setState(() {
+          grupoSelecionado = grupo;
+        });
+        break;
+    }
   }
 
   Future<void> carregaListaMarca() async {
@@ -120,56 +155,62 @@ class _NewProductPageState extends State<NewProductPage> {
         });
   }
 
-  Widget okButton = TextButton(
-    child: const Text("OK"),
-    onPressed: () {},
-  );
-
   void salvar() async {
     if (tituloController.text.isEmpty ||
         valorCompraController.text.isEmpty ||
         estoqueController.text.isEmpty ||
+        barrasController.text.isEmpty ||
         valorVendaController.text.isEmpty) {
       showToast(context, "Ops... Algo deu errado!",
           "Preencha todos os campos obrigatórios.", ToastificationType.warning);
       return;
     }
 
-    if (barrasController.text.isNotEmpty) {
-      var produto = await getProdutoByEAN(barrasController.text);
+    barrasController.text = barrasController.text.toString().padLeft(13, '0');
 
-      if (produto.isNotEmpty) {
-        showToast(
-            // ignore: use_build_context_synchronously
-            context,
-            "Código de barras em uso.",
-            "Já existe um produto cadastrado com este código de barras.",
-            ToastificationType.warning);
-        return;
-      }
+    var produtoExist =
+        await getProdutoByEANID(barrasController.text, _ProdutoSelecionado.id);
+
+    if (produtoExist.isNotEmpty) {
+      showToast(
+          // ignore: use_build_context_synchronously
+          context,
+          "Código de barras em uso.",
+          "Já existe um produto cadastrado com este código de barras.",
+          ToastificationType.warning);
+      return;
     }
 
     int marcaId = marcaSelecionada?.id ?? 0;
     int grupoId = grupoSelecionado?.id ?? 0;
 
     ProductModel produto = ProductModel(
-        id: 0,
+        id: _ProdutoSelecionado.id,
         codigoDeBarras: barrasController.text.trim(),
         tituloDoProduto: tituloController.text.trim(),
         valorDeCusto: double.tryParse(valorCompraController.text) ?? 0,
         valorDeVenda: double.tryParse(valorVendaController.text) ?? 0,
-        dataHoraCriacao: DateTime.now(),
+        dataHoraCriacao: _ProdutoSelecionado.dataHoraCriacao,
         marca: marcaId,
         grupo: grupoId,
         tipoImagem: caminhoImagem.isNotEmpty ? 1 : 0,
         caminhoImagem: caminhoImagem,
         estoqueProduto: double.tryParse(estoqueController.text) ?? 0,
         dataHoraModificacao: DateTime.now(),
-        dataHoraSincronizacao: DateTime(2000, 1, 1));
+        dataHoraSincronizacao: _ProdutoSelecionado.dataHoraSincronizacao);
 
-    createProduct(produto);
+    updateProduct(produto);
     limparCampos();
-    showToast(context, "Sucesso", "O produto foi inserido com sucesso!",
+
+    showToast(context, "Sucesso", "O produto foi alterado com sucesso!",
+        ToastificationType.success);
+
+    Navigator.of(context).pop();
+  }
+
+  void excluir() {
+    deleteProduct(_ProdutoSelecionado.id);
+    showToast(context, "Sucesso", "O produto foi excluido com sucesso!",
         ToastificationType.success);
 
     Navigator.of(context).pop();
@@ -179,8 +220,17 @@ class _NewProductPageState extends State<NewProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+              onTap: () => {excluir()},
+              child: const Icon(Icons.delete_forever),
+            ),
+          )
+        ],
         backgroundColor: Colors.amber[400],
-        title: const Text("Novo Produto"),
+        title: const Text("Editar Produto"),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.amber[400],
@@ -192,9 +242,9 @@ class _NewProductPageState extends State<NewProductPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              if (imagem != null)
-                Image.file(
-                  imagem!,
+              if (caminhoImagem.isNotEmpty)
+                Image.asset(
+                  caminhoImagem,
                   width: 200,
                   height: 200,
                 ),

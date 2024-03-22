@@ -1,8 +1,8 @@
 import 'package:flitter/pages/brand_page.dart';
+import 'package:flitter/pages/customer_page.dart';
 import 'package:flitter/pages/group_page.dart';
 import 'package:flitter/pages/product_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -71,6 +71,26 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Text("Grupos"),
                                 ],
                               )))
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CustomerPage()));
+                              },
+                              child: const Column(
+                                children: [
+                                  Icon(Icons.person),
+                                  Text("Clientes"),
+                                ],
+                              ))),
                     ],
                   ),
                 )

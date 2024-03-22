@@ -1,6 +1,4 @@
-import 'package:flitter/models/group_model.dart';
 import 'package:flitter/pages/detail_sale_page.dart';
-import 'package:flitter/repositories/Entity/group.dart';
 import 'package:flutter/material.dart';
 
 class SalePage extends StatefulWidget {
@@ -16,7 +14,7 @@ class _SalePageState extends State<SalePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[400],
-        title: const Text("Vendas"),
+        title: const Text("Pedidos"),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.amber[400],

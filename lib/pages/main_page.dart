@@ -20,7 +20,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       drawer: Container(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width - 20,
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
           children: [
@@ -37,34 +37,31 @@ class _MainPageState extends State<MainPage> {
             ListTile(
               leading: const Icon(
                 Icons.widgets,
-                color: Color.fromARGB(255, 255, 202, 40),
+                color: Colors.black,
               ),
               title: const Text(
                 "Cadastros",
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 255, 202, 40)),
+                    color: Colors.black),
               ),
               onTap: () => {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const RegisterPage()))
               },
             ),
-            const SizedBox(
-              height: 10,
-            ),
             ListTile(
               leading: const Icon(
                 Icons.local_grocery_store,
-                color: Color.fromARGB(255, 255, 202, 40),
+                color: Colors.black,
               ),
               title: const Text(
-                "Vendas",
+                "Pedidos",
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 255, 202, 40)),
+                    color: Colors.black),
               ),
               onTap: () => {
                 Navigator.of(context).push(
@@ -76,7 +73,15 @@ class _MainPageState extends State<MainPage> {
       ),
       appBar: AppBar(
         backgroundColor: Colors.amber[400],
-        title: const Text("Flitter"),
+        title: Align(
+          alignment: const FractionalOffset(1, 0),
+          child: Image.asset(
+            "assets/image/logo.png",
+            height: 30,
+            alignment: const FractionalOffset(0, 0.5),
+            width: 100,
+          ),
+        ),
       ),
       body: const HomePage(),
     );

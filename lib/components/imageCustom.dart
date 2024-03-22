@@ -15,22 +15,16 @@ class CustomImage extends StatelessWidget {
       case 0:
         imagem = Image.asset(
           "assets/image/imgNotFound.png",
-          width: 100,
-          height: 100,
         );
         break;
       case 1:
         imagem = Image.file(
           File(caminho),
-          width: 100,
-          height: 100,
         );
         break;
       case 2:
         imagem = Image.network(
           caminho,
-          width: 100,
-          height: 100,
         );
         break;
       default:
