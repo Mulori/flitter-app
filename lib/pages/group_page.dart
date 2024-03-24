@@ -1,9 +1,7 @@
-import 'package:flitter/components/toast.dart';
 import 'package:flitter/models/group_model.dart';
 import 'package:flitter/pages/new_group_page.dart';
 import 'package:flitter/repositories/Entity/group.dart';
 import 'package:flutter/material.dart';
-import 'package:toastification/toastification.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key});
@@ -51,13 +49,9 @@ class _GroupPageState extends State<GroupPage> {
             itemCount: lista.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                  title: Text('#' +
-                      lista[index].id.toString() +
-                      ' ' +
-                      lista[index].nomeGrupo));
+                  title: Text('#${lista[index].id} ${lista[index].nomeGrupo}'));
             }),
       ),
     );
-    ;
   }
 }

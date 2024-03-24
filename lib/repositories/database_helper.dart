@@ -17,6 +17,12 @@ String createTableProdutos =
 String createTableClientes =
     'CREATE TABLE clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, cep TEXT, endereco TEXT, numero TEXT, bairro TEXT, cidade TEXT, uf TEXT, cpfCnpj TEXT, tipoPessoa TEXT, data_hora_criacao DATETIME, data_hora_modificacao DATETIME, data_hora_sincronizacao DATETIME);';
 
+String createTableVendas =
+    'CREATE TABLE vendas (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER, data_fechamento DATETIME, valor_total REAL, status TEXT, comanda TEXT, cpfCnpj TEXT, data_hora_criacao DATETIME, data_hora_modificacao DATETIME, data_hora_sincronizacao DATETIME, FOREIGN KEY (cliente_id) REFERENCES clientes(id));';
+
+String createTableItensVendas =
+    'CREATE TABLE itens_vendas (id INTEGER PRIMARY KEY AUTOINCREMENT, venda_id INTEGER, produto_id INTEGER, status TEXT, preco REAL, quantidade REAL, desconto REAL, valor_total REAL, data_hora_criacao DATETIME, data_hora_modificacao DATETIME, data_hora_sincronizacao DATETIME, FOREIGN KEY (venda_id) REFERENCES vendas(id), FOREIGN KEY (produto_id) REFERENCES produtos(id));';
+
 Future<Database> getDatabase() async {
   return openDatabase(
     join(await getDatabasesPath(), "flitter.db"),
@@ -25,7 +31,7 @@ Future<Database> getDatabase() async {
       await db.execute('PRAGMA foreign_keys = ON');
     },
     onUpgrade: onUpgrade,
-    version: 3,
+    version: 6,
   );
 }
 
@@ -33,10 +39,11 @@ void onCreate(Database db, int newVersion) {
   db.execute(createTableMarcas);
   db.execute(createTableGrupos);
   db.execute(createTableProdutos);
+  db.execute(createTableClientes);
+  db.execute(createTableVendas);
+  db.execute(createTableItensVendas);
 }
 
 void onUpgrade(Database db, int oldVersion, int newVersion) {
-  if (oldVersion < newVersion) {
-    db.execute(createTableClientes);
-  }
+  if (oldVersion < newVersion) {}
 }
