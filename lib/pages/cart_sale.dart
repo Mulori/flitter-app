@@ -96,3 +96,26 @@ class _CartSalePageState extends State<CartSalePage> {
     );
   }
 }
+
+class DoneSale extends StatefulWidget {
+  const DoneSale({super.key});
+
+  @override
+  State<DoneSale> createState() => _DoneSaleState();
+}
+
+class _DoneSaleState extends State<DoneSale> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: <Widget>[
+        Column(
+          children: [
+            Text("Fechamento de Pedido"),
+            TextField(),
+          ],
+        )
+      ],
+    );
+  }
+}

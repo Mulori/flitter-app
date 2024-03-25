@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flitter/components/imageCustom.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:flitter/components/toast.dart';
 import 'package:flitter/models/group_model.dart';
@@ -243,10 +244,9 @@ class _EditProductPageState extends State<EditProductPage> {
           child: Column(
             children: [
               if (caminhoImagem.isNotEmpty)
-                Image.asset(
-                  caminhoImagem,
-                  width: 200,
-                  height: 200,
+                CustomImage(
+                  tipo: _ProdutoSelecionado.tipoImagem,
+                  caminho: _ProdutoSelecionado.caminhoImagem,
                 ),
               const SizedBox(
                 height: 20,

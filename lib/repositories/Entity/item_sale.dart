@@ -11,6 +11,9 @@ Future createItemSale(ItemSaleModel model) async {
       model.toMap(),
     );
 
+    await db.rawUpdate(
+        "update vendas set valor_total = (select sum(valor_total) from itens_vendas where venda_id = vendas.id)");
+
     return id;
   } catch (ex) {
     print(ex);
@@ -62,6 +65,9 @@ Future deleteItem(int id) async {
       where: "id = ?",
       whereArgs: [id],
     );
+
+    await db.rawUpdate(
+        "update vendas set valor_total = (select sum(valor_total) from itens_vendas where venda_id = vendas.id)");
   } catch (ex) {
     print(ex);
     return;
@@ -77,6 +83,13 @@ Future updateItemQtde(int id, double qtde) async {
       where: "id = ?",
       whereArgs: [id],
     );
+
+    await db.rawUpdate(
+        "update itens_vendas set valor_total = (preco * quantidade) where id = ?",
+        [id]);
+
+    await db.rawUpdate(
+        "update vendas set valor_total = (select sum(valor_total) from itens_vendas where venda_id = vendas.id)");
   } catch (ex) {
     print(ex);
     return;
